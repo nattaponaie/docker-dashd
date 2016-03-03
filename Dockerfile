@@ -12,11 +12,17 @@ RUN curl -s https://raw.githubusercontent.com/thelazier/docker-dashd/master/buil
 
 ENV DASH_RPCUSER dashrpc
 ENV DASH_RPCPASSWORD 4C3NET7icz9zNE3CY1X7eSVrtpnSb6KcjEgMJW3armRV
-USER nobody
 
-RUN mkdir /tmp/dash \
-  && echo '#' > /tmp/dash/dash.conf \
-  && echo rpcuser=$DASH_RPCUSER >> /tmp/dash/dash.conf \
-  && echo rpcpassword=$DASH_RPCPASSWORD >> /tmp/dash/dash.conf
-CMD /usr/local/bin/dashd -logips -printtoconsole -daemon=0 -datadir=/tmp/dash
+RUN mkdir /dashdata  \
+  && echo '#' > /dashdata/dash.conf \
+  && echo rpcuser=$DASH_RPCUSER >> /dashdata/dash.conf \
+  && echo rpcpassword=$DASH_RPCPASSWORD >> /dashdata/dash.conf \
+  && echo logips=1 > /dashdata/dash.conf \
+  && echo printtoconsole=1 > /dashdata/dash.conf \
+  && echo daemon=0 > /dashdata/dash.conf \
+  && chown -R nobody /dashdata
+VOLUME ["/dashdata"]
+USER nobody
+CMD /usr/local/bin/dashd -datadir=/dashdata
+
 # End.
