@@ -22,6 +22,7 @@ RUN mkdir /dashdata  \
   && echo daemon=0 > /dashdata/dash.conf \
   && chown -R nobody /dashdata
 VOLUME ["/dashdata"]
+RUN ln -s /dashdata /.dash
 USER nobody
-CMD /usr/local/bin/dashd -datadir=/dashdata
+CMD /usr/local/bin/dashd
 # End.
