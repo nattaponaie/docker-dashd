@@ -27,3 +27,11 @@ apk del build-base git tar perl autoconf automake libtool linux-headers patch fi
 rm -r /var/cache/apk/*
 rm -r /dash
 
+# run.sh
+cat > /run.sh << EOF
+#!/usr/bin/env bash
+trap '/usr/local/bin/dash-cli stop' SIGTERM
+/usr/local/bin/dashd
+while true; do :; done
+EOF
+
