@@ -18,8 +18,8 @@ cd ..
 make
 make test
 make install
-cp -rv `pwd`/depends/x86_64-pc-linux-gnu/bin /usr/local/bin
-cp -rv `pwd`/depends/x86_64-pc-linux-gnu/lib /usr/local/lib
+cp -rv `pwd`/depends/x86_64-pc-linux-gnu/bin/. /usr/local/bin
+cp -rv `pwd`/depends/x86_64-pc-linux-gnu/lib/. /usr/local/lib
 
 # Cleanup
 cd /
