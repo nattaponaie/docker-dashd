@@ -8,7 +8,7 @@ LABEL description="Dockerized Dash Daemon"
 RUN apk --update add libstdc++ curl && rm -r /var/cache/apk/*
 
 WORKDIR /
-RUN curl -s https://raw.githubusercontent.com/thelazier/docker-dashd/master/build.sh | /bin/sh
+RUN curl -s https://raw.githubusercontent.com/thelazier/docker-dashd/v0.12.1.x/build.sh | /bin/sh
 
 ENV DASH_RPCUSER dashrpc
 ENV DASH_RPCPASSWORD 4C3NET7icz9zNE3CY1X7eSVrtpnSb6KcjEgMJW3armRV
