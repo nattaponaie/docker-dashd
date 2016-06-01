@@ -17,13 +17,10 @@ RUN mkdir /dashdata  \
   && echo '#' > /dashdata/dash.conf \
   && echo rpcuser=$DASH_RPCUSER >> /dashdata/dash.conf \
   && echo rpcpassword=$DASH_RPCPASSWORD >> /dashdata/dash.conf \
-  && echo logips=1 > /dashdata/dash.conf \
-  && echo printtoconsole=1 > /dashdata/dash.conf \
-  && echo daemon=0 > /dashdata/dash.conf \
-  && chown -R nobody /dashdata
+  && echo logips=1 > /dashdata/dash.conf
+
 VOLUME ["/dashdata"]
 RUN ln -s /dashdata /.dash
-USER nobody
-CMD /usr/local/bin/dashd
+CMD ["/run.sh"]
 
 # End.
