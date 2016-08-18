@@ -20,7 +20,7 @@ RUN mkdir /dashdata  \
   && echo logips=1 > /dashdata/dash.conf
 
 VOLUME ["/dashdata"]
-RUN ln -s /dashdata /.dash
+RUN ln -s /dashdata /.dashcore
 CMD ["/run.sh"]
 
 # End.
