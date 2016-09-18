@@ -34,5 +34,5 @@ trap '/usr/local/bin/dash-cli stop' SIGTERM
 /usr/local/bin/dashd
 while true; do :; done
 EOF
-
+chmod a+x /run.sh
 # End
