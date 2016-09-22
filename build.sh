@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # build
-apk --update add build-base git tar perl autoconf automake libtool linux-headers patch file
+apk --update add build-base git tar perl autoconf automake libtool linux-headers patch file bash
 
 # Clone
 git clone -b v0.12.1.x --depth 1 https://github.com/dashpay/dash.git
