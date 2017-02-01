@@ -23,23 +23,16 @@ RUN apk --no-cache --update add libstdc++ curl build-base git tar perl autoconf 
     && rm -rvf /dash \
     && rm -rvf /var/cache/apk/*
 
-ARG USER_ID
-ARG GROUP_ID
-ENV HOME /dash
-# add user with specified (or default) user/group ids
-ENV USER_ID ${USER_ID:-1000}
-ENV GROUP_ID ${GROUP_ID:-1000}
+# Create run script
+RUN echo $'#!/usr/bin/env bash\n\
+set -x\n\
+trap '"'"'/usr/local/bin/dash-cli stop'"'"$' SIGTERM\n\
+/usr/local/bin/dashd &\n\
+while true; do sleep; done\n\
+' > /run_dashd.sh && chmod +x /run_dashd.sh && cat /run_dashd.sh
 
-RUN apk --no-cache --update add shadow \
-    && groupadd -g ${GROUP_ID} dash \
-    && useradd -u ${USER_ID} -g dash -s /bin/bash -m -d /dash dash \
-    && chown dash:dash -R /dash \
-    && apk del shadow
-
-USER dash
-WORKDIR /dash
-VOLUME ["/dash"]
-ENTRYPOINT ["/usr/local/bin/dashd"]
+VOLUME ["/root/.dashcore"]
+ENTRYPOINT ["/run_dashd.sh"]
 EXPOSE 9998 9999 19998 19999
 
 # End.
