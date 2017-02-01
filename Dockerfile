@@ -13,6 +13,7 @@ RUN apk --no-cache --update add libstdc++ curl build-base git tar perl autoconf 
     && cd depends \
     && make NO_QT=1 HOST=x86_64-pc-linux-gnu \
     && cd .. \
+    && git reset --hard \
     && ./autogen.sh \
     && ./configure --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
     && make install \
