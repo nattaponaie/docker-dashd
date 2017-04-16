@@ -6,7 +6,7 @@ MAINTAINER TheLazieR <thelazier@gmail.com>
 LABEL description="Dockerized Dash Daemon"
 
 RUN apk --no-cache --update add libstdc++ curl build-base git tar perl autoconf automake libtool linux-headers patch file bash \
-    && git clone -b v0.12.1.x --depth 1 https://github.com/dashpay/dash.git \
+    && git clone -b v0.12.2.x --depth 1 https://github.com/dashpay/dash.git \
     && cd dash \
     # Patch for OpenSSL 1.0.1t (from 1.0.1k)
     && curl -s https://raw.githubusercontent.com/thelazier/docker-dashd/v0.12.1.x/patches/openssl1.0.1t.patch | patch -p1 \
