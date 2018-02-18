@@ -1,9 +1,8 @@
 # Dockerfile for Dashd Server
 # https://www.dash.org/
 
-FROM alpine:edge
-MAINTAINER TheLazieR <thelazier@gmail.com>
-LABEL description="Dockerized Dash Daemon"
+FROM alpine as builder
+WORKDIR /
 
 RUN apk --no-cache --update add libstdc++ curl build-base git tar perl autoconf automake libtool linux-headers patch file bash \
     && git clone -b master --depth 1 https://github.com/dashpay/dash.git \
@@ -16,13 +15,7 @@ RUN apk --no-cache --update add libstdc++ curl build-base git tar perl autoconf 
     && git reset --hard \
     && ./autogen.sh \
     && ./configure --prefix=`pwd`/depends/x86_64-pc-linux-gnu --disable-wallet \
-    && make install \
-    && cp -rv `pwd`/depends/x86_64-pc-linux-gnu/bin/. /usr/local/bin \
-    && cp -rv `pwd`/depends/x86_64-pc-linux-gnu/lib/. /usr/local/lib \
-    && cd / \
-    && apk del build-base git tar perl autoconf automake libtool linux-headers patch file curl\
-    && rm -rvf /dash \
-    && rm -rvf /var/cache/apk/*
+    && make install
 
 # Create run script
 RUN echo $'#!/usr/bin/env bash\n\
@@ -30,10 +23,17 @@ set -x\n\
 trap '"'"'/usr/local/bin/dash-cli stop'"'"$' SIGTERM\n\
 /usr/local/bin/dashd &\n\
 while true; do sleep; done\n\
-' > /run_dashd.sh && chmod +x /run_dashd.sh && cat /run_dashd.sh
-
-VOLUME ["/root/.dashcore"]
-ENTRYPOINT ["/run_dashd.sh"]
-EXPOSE 9998 9999 19998 19999
+' > /dash/depends/x86_64-pc-linux-gnu/bin/run_dashd.sh
+RUN chmod +x /dash/depends/x86_64-pc-linux-gnu/bin/run_dashd.sh
 
 # End.
+
+FROM alpine
+MAINTAINER TheLazieR <thelazier@gmail.com>
+LABEL description="Dockerized Dash Daemon"
+COPY --from=builder /dash/depends/x86_64-pc-linux-gnu/. /usr/local/.
+RUN apk --no-cache --update add libstdc++ bash
+VOLUME ["/root/.dashcore"]
+ENTRYPOINT ["/usr/local/bin/run_dashd.sh"]
+EXPOSE 9998 9999 19998 19999
+
